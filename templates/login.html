@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - Hệ thống NPP</title>
-    <link rel="icon" type="image/png" href="../images/Logo THP 2.png">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/Logo THP 2.png') }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -56,7 +56,7 @@
             
             <div class="text-center mb-4">
                 <div class="display-5 text-primary mb-2">
-                    <img src="../images/Logo THP.png" alt="Logo THP" 
+                    <img src="{{ url_for('static', filename='images/Logo THP.png') }}" alt="Logo THP" 
                          class="img-fluid mb-2" 
                          style="width: 70px; height: 70px; object-fit: cover; clip-path: circle(38%); display: inline-block;">
                 </div>
@@ -135,7 +135,7 @@ document.getElementById('loginForm').addEventListener('submit', function(e){
         if(data.success){
             localStorage.setItem('user', JSON.stringify(data.user));
             alert('Đăng nhập thành công!');
-            window.location.href = '../index.html';
+            window.location.href = '/';
         } else {
             alert(data.message || 'Sai tài khoản hoặc mật khẩu');
         }

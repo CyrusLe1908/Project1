@@ -13,6 +13,11 @@ CORS(app)
 def home():
     return render_template('index.html')
 
+
+@app.route('/login')
+def login_page():
+    return render_template('login.html')
+
 # =======================================================
 # 1. API LẤY DANH SÁCH SẢN PHẨM (GET)
 # =======================================================
@@ -282,6 +287,36 @@ def get_dashboard():
     except Exception as e:
         print(e)
         return jsonify({"error": "Lỗi server"}), 500
+    
+# API: LẤY DANH SÁCH PHIẾU (receipts)
+@app.route('/api/receipts', methods=['GET'])
+def get_receipts():
+
+    conn = get_db_connection()
+
+    if conn is None:
+        return jsonify({"error": "Không thể kết nối Database"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("""
+            SELECT *
+            FROM receipts
+            ORDER BY id DESC
+        """)
+
+        receipts = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify(receipts)
+
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
     
 # =======================================================
 # API ĐĂNG NHẬP
