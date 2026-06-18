@@ -358,39 +358,21 @@ def login():
                 "success": False,
                 "message": "Sai tài khoản hoặc mật khẩu"
             }), 401
-        
+
+        # Kiểm tra mật khẩu: tạm thời so sánh plaintext để kiểm tra DB lưu plaintext hay hash
+        stored_hash = user.get('password_hash') if isinstance(user, dict) else None
+
         print("DB:", stored_hash)
         print("INPUT:", password)
 
-        # Kiểm tra mật khẩu: ưu tiên compare hash nếu có
-        stored_hash = user.get('password_hash') if isinstance(user, dict) else None
-        if stored_hash:
-            try:
-                from werkzeug.security import check_password_hash
-                if not check_password_hash(stored_hash, password):
-                    cursor.close()
-                    conn.close()
-                    return jsonify({
-                        "success": False,
-                        "message": "Sai tài khoản hoặc mật khẩu"
-                    }), 401
-            except Exception:
-                if stored_hash != password:
-                    cursor.close()
-                    conn.close()
-                    return jsonify({
-                        "success": False,
-                        "message": "Sai tài khoản hoặc mật khẩu"
-                    }), 401
-        else:
-            # fallback: compare plaintext password field if exists
-            if user.get('password') != password:
-                cursor.close()
-                conn.close()
-                return jsonify({
-                    "success": False,
-                    "message": "Sai tài khoản hoặc mật khẩu"
-                }), 401
+        # Nếu stored_hash khác mật khẩu nhập, trả về lỗi (dùng để test)
+        if stored_hash != password:
+            cursor.close()
+            conn.close()
+            return jsonify({
+                "success": False,
+                "message": "Sai tài khoản hoặc mật khẩu"
+            }), 401
 
         # Trả về thông tin user (loại bỏ trường mật khẩu)
         response_user = {
