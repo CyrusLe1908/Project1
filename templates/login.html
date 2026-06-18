@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập - Hệ thống NPP</title>
+    <link rel="icon" type="image/png" href="../images/Logo THP 2.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -55,19 +56,26 @@
             
             <div class="text-center mb-4">
                 <div class="display-5 text-primary mb-2">
-                    <i class="fa-solid fa-warehouse"></i>
+                    <img src="../images/Logo THP.png" alt="Logo THP" 
+                         class="img-fluid mb-2" 
+                         style="width: 70px; height: 70px; object-fit: cover; clip-path: circle(38%); display: inline-block;">
                 </div>
                 <h4 class="fw-bold text-dark mb-1">NPP MANAGER</h4>
                 <p class="text-muted small">Hệ thống quản lý kho và đại lý phân phối</p>
             </div>
 
-            <form action="#" method="POST">
+            <form id="loginForm">
                 
                 <div class="mb-3">
                     <label class="form-label small fw-semibold text-secondary">Tên đăng nhập</label>
                     <div class="input-group">
                         <span class="input-group-text text-muted"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" class="form-control" placeholder="Nhập username của bạn" required>
+                        <input
+                            type="text"
+                            id="username"
+                            class="form-control"
+                            placeholder="Nhập username của bạn"
+                            required>
                     </div>
                 </div>
 
@@ -78,7 +86,12 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text text-muted"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" class="form-control" placeholder="••••••••" required>
+                        <input
+                            type="password"
+                            id="password"
+                            class="form-control"
+                            placeholder="••••••••"
+                            required>
                     </div>
                 </div>
 
@@ -99,5 +112,41 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+const API_BASE_URL = 'http://localhost:5000/api';
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+
+    e.preventDefault();
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    fetch(`${API_BASE_URL}/login`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            localStorage.setItem('user', JSON.stringify(data.user));
+            alert('Đăng nhập thành công!');
+            window.location.href = '../index.html';
+        } else {
+            alert(data.message || 'Sai tài khoản hoặc mật khẩu');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Không thể kết nối tới Server Flask');
+    });
+
+});
+
+</script>
 </body>
 </html>

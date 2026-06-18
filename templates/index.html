@@ -97,10 +97,10 @@
                         <h5 class="mb-0 fw-semibold text-secondary" id="page-title">Tổng quan hệ thống</h5>
                         <div class="dropdown">
                             <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                                <i class="fa-solid fa-user-shield me-1"></i> Admin: <strong>Quốc Cường</strong>
+                                <i class="fa-solid fa-user-shield me-1"></i> Admin: <strong id="current-user"></strong>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item px-3 py-1 text-danger text-decoration-none" href="login.html"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a></li>
+                                <li><a class="dropdown-item px-3 py-1 text-danger text-decoration-none" href="#" onclick="logout()"><i class="fa-solid fa-right-from-bracket me-2"></i>Đăng xuất</a></li>
                             </ul>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                                     <div class="card-body d-flex justify-content-between align-items-center">
                                         <div>
                                             <h6 class="text-uppercase text-white-50 small">Tổng mặt hàng</h6>
-                                            <h2 class="mb-0 fw-bold">1,248</h2>
+                                            <h2 class="mb-0 fw-bold" id="total-products">0</h2>
                                         </div>
                                         <i class="fa-solid fa-box fa-2x text-white-50"></i>
                                     </div>
@@ -126,7 +126,7 @@
                                     <div class="card-body d-flex justify-content-between align-items-center">
                                         <div>
                                             <h6 class="text-uppercase text-white-50 small">Đại lý liên kết</h6>
-                                            <h2 class="mb-0 fw-bold">45</h2>
+                                            <h2 class="mb-0 fw-bold" id="total-agencies">0</h2>
                                         </div>
                                         <i class="fa-solid fa-store fa-2x text-white-50"></i>
                                     </div>
@@ -148,7 +148,7 @@
                                     <div class="card-body d-flex justify-content-between align-items-center">
                                         <div>
                                             <h6 class="text-uppercase text-white-50 small">Sắp hết hàng</h6>
-                                            <h2 class="mb-0 fw-bold">12 mã</h2>
+                                            <h2 class="mb-0 fw-bold" id="low-stock">0</h2>
                                         </div>
                                         <i class="fa-solid fa-triangle-exclamation fa-2x text-white-50"></i>
                                     </div>
@@ -230,7 +230,7 @@
                                             <th class="text-center">Thao tác</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="import-table-body">
                                         <tr>
                                             <td><code>PNK-260601</code></td>
                                             <td>15/06/2026</td>
@@ -266,7 +266,7 @@
                                             <th class="text-center">Thao tác</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="export-table-body">
                                         <tr>
                                             <td><code>PXK-260602</code></td>
                                             <td>16/06/2026</td>
@@ -294,24 +294,24 @@
                                         <form id="formCreateUser">
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Tên đăng nhập (Username)</label>
-                                                <input type="text" class="form-control" placeholder="Ví dụ: tuanh.kho" required>
+                                                <input id="new_username" type="text" class="form-control" placeholder="Ví dụ: tuanh.kho" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Họ và tên</label>
-                                                <input type="text" class="form-control" placeholder="Ví dụ: Nguyễn Tuấn Anh" required>
+                                                <input id="new_fullname" type="text" class="form-control" placeholder="Ví dụ: Nguyễn Tuấn Anh" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Mật khẩu khởi tạo</label>
-                                                <input type="password" class="form-control" placeholder="••••••••" required>
+                                                <input id="new_password" type="password" class="form-control" placeholder="••••••••" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label fw-semibold small">Phân quyền vai trò</label>
-                                                <select class="form-select">
+                                                <select id="new_role" class="form-select">
                                                     <option value="staff" selected>Staff (Nhân viên kho)</option>
                                                     <option value="admin">Admin (Quản trị viên)</option>
                                                 </select>
                                             </div>
-                                            <button type="button" class="btn btn-success w-100 fw-bold py-2" onclick="alert('Cấp tài khoản thành công!')"><i class="fa-solid fa-circle-check me-1"></i> Cấp tài khoản</button>
+                                            <button type="button" class="btn btn-success w-100 fw-bold py-2" onclick="createUser()"><i class="fa-solid fa-circle-check me-1"></i> Cấp tài khoản</button>
                                         </form>
                                     </div>
                                 </div>
@@ -331,7 +331,7 @@
                                                     <th class="text-center">Hành động</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="user-table-body">
                                                 <tr>
                                                     <td><code>cyrusle.admin</code></td>
                                                     <td>Quốc Cường (Bạn)</td>
@@ -388,7 +388,7 @@
                                 <select id="p_unit" class="form-select">
                                     <option value="Thùng">Thùng</option>
                                     <option value="Gói">Gói</option>
-                                    <option value="Chao">Chao</option>
+                                    <option value="Chai">Chai</option>
                                 </select>
                             </div>
                             <div class="col-6">
@@ -411,10 +411,57 @@
     </div>
 
     <div class="modal fade" id="modalEditProduct" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-header bg-warning"><h5 class="modal-title fw-bold">Cập nhật sản phẩm</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="mb-3"><label class="form-label small">Cập nhật số lượng mới</label><input type="number" class="form-control" value="500"></div></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button><button type="button" class="btn btn-warning" data-bs-dismiss="modal" onclick="alert('Đã lưu thay đổi!')">Lưu</button></div></div></div>
+        <div class="modal-dialog modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-header bg-warning"><h5 class="modal-title fw-bold">Cập nhật sản phẩm</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+
+    <input type="hidden" id="edit_id">
+
+    <div class="mb-3">
+        <label>Tên sản phẩm</label>
+        <input type="text"
+               id="edit_name"
+               class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Danh mục</label>
+        <input type="text"
+               id="edit_category"
+               class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Đơn vị</label>
+        <input type="text"
+               id="edit_unit"
+               class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Số lượng</label>
+        <input type="number"
+               id="edit_quantity"
+               class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label>Giá nhập</label>
+        <input type="number"
+               id="edit_price"
+               class="form-control">
+    </div>
+
+</div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button><button
+type="button"
+class="btn btn-warning"
+data-bs-dismiss="modal"
+onclick="updateProduct()">
+Lưu
+</button></div></div></div>
     </div>
     <div class="modal fade" id="modalDeleteConfirm" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-body text-center pt-4"><div class="text-danger mb-2"><i class="fa-solid fa-circle-exclamation fa-2x"></i></div><h6 class="fw-bold">Xóa mục này vĩnh viễn?</h6></div><div class="modal-footer justify-content-center border-0"><button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Không</button><button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="alert('Đã xóa dữ liệu!')">Đồng ý</button></div></div></div>
+        <div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-body text-center pt-4"><div class="text-danger mb-2"><i class="fa-solid fa-circle-exclamation fa-2x"></i></div><h6 class="fw-bold">Xóa mục này vĩnh viễn?</h6></div><div class="modal-footer justify-content-center border-0"><button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Không</button><button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="deleteProduct()">Đồng ý</button></div></div></div>
     </div>
 
     <div class="modal fade" id="modalAddAgency" tabindex="-1" aria-hidden="true">
@@ -535,7 +582,7 @@
                                 <th>Thành tiền</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="export-detail-body">
                             <tr>
                                 <td>Coca-Cola 320ml</td>
                                 <td><span class="badge bg-secondary">Thùng</span></td>
@@ -570,6 +617,26 @@
     <script>
         // Cấu hình Base URL dùng chung cho toàn bộ hệ thống dự án lâu dài
         const API_BASE_URL = 'http://localhost:5000/api';
+
+        // Kiểm tra trạng thái đăng nhập, nếu chưa có -> chuyển về trang login
+        let user = null;
+        try {
+            user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = 'templates/login.html';
+            }
+        } catch (e) {
+            window.location.href = 'templates/login.html';
+        }
+
+        function logout(){
+            localStorage.removeItem('user');
+            window.location.href = 'templates/login.html';
+        }
+
+        let currentDeleteId = null;
+
+        let currentEditId = null;
 
         // Xử lý logic chuyển đổi tab mượt mà trên giao diện Sidebar Navigation
         document.querySelectorAll('#menuTabs .nav-link').forEach(link => {
@@ -608,26 +675,26 @@
                         let price = prod.import_price ? Number(prod.import_price).toLocaleString('vi-VN') + ' đ' : '0 đ';
 
                         // Xử lý quy đổi mã số danh mục (category_id) thành chuỗi tên chữ hiển thị chuyên nghiệp
-                        let categoryText = 'Chưa phân loại';
-                        switch(Number(prod.category_id)) {
-                            case 1: categoryText = 'Nước giải khát'; break;
-                            case 2: categoryText = 'Bánh kẹo / Đồ ăn vặt'; break;
-                            case 3: categoryText = 'Gia vị / Nhu yếu phẩm'; break;
-                            default: categoryText = prod.category || `Danh mục ${prod.category_id}`;
-                        }
+                            let categoryText =
+                        prod.category || "Chưa phân loại"; 
+                           // case 1: categoryText = 'Nước giải khát'; break;
+                           // case 2: categoryText = 'Bánh kẹo / Đồ ăn vặt'; break;
+                           // case 3: categoryText = 'Gia vị / Nhu yếu phẩm'; break;
+                           // default: categoryText = prod.category || `Danh mục ${prod.category_id}`;
+                        
 
                         htmlContent += `
                             <tr>
                                 <td>${index + 1}</td>
-                                <td><code>NPP-${String(prod.product_id).padStart(3, '0')}</code></td>
+                                <td><code>${prod.sku || ('NPP-' + String(prod.id).padStart(3,'0'))}</code></td>
                                 <td><strong>${prod.product_name || 'Không rõ tên'}</strong></td>
                                 <td>${categoryText}</td>
                                 <td>${stockBadge}</td>
                                 <td><span class="badge bg-secondary">${unit}</span></td>
                                 <td>${price}</td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditProduct"><i class="fa-solid fa-pen"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteConfirm"><i class="fa-solid fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-warning" onclick="prepareEdit(${prod.id})" data-bs-toggle="modal" data-bs-target="#modalEditProduct"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="prepareDelete(${prod.id})" data-bs-toggle="modal" data-bs-target="#modalDeleteConfirm"><i class="fa-solid fa-trash"></i></button>
                                 </td>
                             </tr>
                         `;
@@ -657,7 +724,9 @@
             // 2. Đóng gói payload JSON khớp cấu trúc trường DB
             const productData = {
                 product_name: productName,
-                category_id: parseInt(categoryId),
+                category: document.getElementById('p_category').options[
+                    document.getElementById('p_category').selectedIndex
+                ].text,
                 unit: unit,
                 stock_quantity: parseInt(stockQuantity),
                 import_price: parseFloat(importPrice)
@@ -683,6 +752,8 @@
                 
                 // Tải lại bảng ngay lập tức để dòng mới hiện lên không cần F5
                 loadProductsToTable();
+
+                loadDashboard();
                 
                 // Đóng hộp thoại Modal ẩn của Bootstrap
                 const modalElement = document.getElementById('modalAddProduct');
@@ -730,10 +801,292 @@
                 .catch(error => console.error('Lỗi khi tải danh sách đại lý:', error));
         }
 
+        function loadDashboard() {
+
+    fetch(`${API_BASE_URL}/dashboard`)
+        .then(response => response.json())
+        .then(data => {
+
+            document.getElementById('total-products').innerText =
+                data.total_products;
+
+            document.getElementById('total-agencies').innerText =
+                data.total_agencies;
+
+            document.getElementById('low-stock').innerText =
+                data.low_stock;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    }
+
+    function prepareDelete(productId){
+        currentDeleteId = productId;
+    }
+
+    function deleteProduct(){
+
+    if(!currentDeleteId){
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/products/${currentDeleteId}`,{
+        method:'DELETE'
+    })
+    .then(response=>response.json())
+    .then(data=>{
+
+    alert(data.message);
+
+    currentDeleteId = null;
+
+    loadProductsToTable();
+
+    loadDashboard();
+
+})
+    .catch(error=>{
+        console.error(error);
+        alert("Lỗi khi xóa");
+    });
+
+}function prepareEdit(productId){
+
+    currentEditId = productId;
+
+    fetch(`${API_BASE_URL}/products/${productId}`)
+    .then(response => response.json())
+    .then(product => {
+
+        document.getElementById('edit_name').value =
+            product.product_name;
+
+        document.getElementById('edit_category').value =
+            product.category;
+
+        document.getElementById('edit_unit').value =
+            product.unit;
+
+        document.getElementById('edit_quantity').value =
+            product.stock_quantity;
+
+        document.getElementById('edit_price').value =
+            product.import_price;
+
+    });
+
+}
+
+function updateProduct(){
+
+    const data = {
+
+    product_name:
+        document.getElementById('edit_name').value,
+
+    category:
+        document.getElementById('edit_category').value,
+
+    unit:
+        document.getElementById('edit_unit').value,
+
+    stock_quantity:
+        parseInt(
+            document.getElementById('edit_quantity').value
+        ),
+
+    import_price:
+        parseFloat(
+            document.getElementById('edit_price').value
+        )
+};
+
+    fetch(
+        `${API_BASE_URL}/products/${currentEditId}`,
+        {
+            method:'PUT',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify(data)
+        }
+    )
+    .then(response=>response.json())
+    .then(data=>{
+
+    alert(data.message);
+
+    currentDeleteId = null;
+
+    loadProductsToTable();
+
+    loadDashboard();
+
+})
+
+}
+
+function loadUsersToTable(){
+
+    fetch(`${API_BASE_URL}/users`, {
+        headers: { 'Role': (user && user.role) || '' }
+    })
+    .then(response => {
+        if (response.status === 403) return response.json().then(j=>{throw j});
+        return response.json();
+    })
+    .then(users => {
+
+        const tbody = document.getElementById("user-table-body");
+
+        let html = "";
+
+        users.forEach(u => {
+
+            let roleBadge =
+                u.role === "admin"
+                ? '<span class="badge bg-danger">Admin</span>'
+                : '<span class="badge bg-info text-dark">Staff</span>';
+
+            let actions = `<button class="btn btn-sm btn-outline-secondary me-1" onclick="resetPassword(${u.id})"><i class="fa-solid fa-key"></i></button>`;
+
+            if(u.role !== 'admin'){
+                actions += `<button class="btn btn-sm btn-outline-danger" onclick="deleteUser(${u.id})"><i class="fa-solid fa-trash"></i></button>`;
+            }else{
+                actions += `<button class="btn btn-sm btn-light" disabled>Mặc định</button>`;
+            }
+
+            html += `
+                <tr>
+                    <td><code>${u.username}</code></td>
+                    <td>${u.fullname}</td>
+                    <td>${roleBadge}</td>
+                    <td class="text-center">
+                        ${actions}
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+
+    })
+    .catch(error => {
+        console.error(error);
+        alert(error && error.error ? error.error : 'Lỗi khi tải danh sách user');
+    });
+
+}
+
+function deleteUser(userId){
+
+    if(!confirm("Bạn có chắc muốn xóa tài khoản này?")){
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/users/${userId}`,{
+        method:'DELETE',
+        headers: { 'Role': (user && user.role) || '' }
+    })
+    .then(response => response.json().then(json => ({status: response.status, body: json})))
+    .then(({status, body})=>{
+        if(status === 403){
+            alert(body.error || 'Không có quyền');
+            return;
+        }
+
+        alert(body.message || 'Đã xóa');
+
+        loadUsersToTable();
+
+    })
+    .catch(error=>{
+
+        console.error(error);
+
+        alert("Lỗi khi xóa user");
+
+    });
+
+}
+
+function createUser(){
+    const username = document.getElementById('new_username').value.trim();
+    const fullname = document.getElementById('new_fullname').value.trim();
+    const password = document.getElementById('new_password').value;
+    const roleVal = document.getElementById('new_role').value;
+
+    if(!username || !password || !fullname){
+        alert('Vui lòng nhập đầy đủ thông tin');
+        return;
+    }
+
+    fetch(`${API_BASE_URL}/users`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Role': (user && user.role) || ''
+        },
+        body: JSON.stringify({ username, password, fullname, role: roleVal })
+    })
+    .then(response => response.json().then(json => ({status: response.status, body: json})))
+    .then(({status, body}) => {
+        if(status === 403){
+            alert(body.error || 'Không có quyền');
+            return;
+        }
+        alert(body.message || 'Tạo user thành công');
+        document.getElementById('formCreateUser').reset();
+        loadUsersToTable();
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Lỗi khi tạo user');
+    });
+}
+
+function resetPassword(userId){
+    if(!confirm('Reset mật khẩu về 123456 cho user này?')) return;
+
+    fetch(`${API_BASE_URL}/users/reset/${userId}`,{
+        method: 'PUT',
+        headers: { 'Role': (user && user.role) || '' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Reset thành công');
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Lỗi khi reset mật khẩu');
+    });
+}
+
         // Kích hoạt nạp dữ liệu từ API ngay khi cấu trúc DOM được thiết lập thành công
         document.addEventListener('DOMContentLoaded', function() {
+
+            if (user) {
+                const el = document.getElementById('current-user');
+                if (el) el.innerText = user.fullname || user.username || '';
+
+                // Nếu role là staff thì ẩn menu quản lý User
+                if (user.role === 'staff'){
+                    const userTab = document.querySelector('[data-target="page-users"]');
+                    if (userTab && userTab.parentElement) userTab.parentElement.style.display = 'none';
+                }
+            } else {
+                window.location.href = 'templates/login.html';
+            }
+
+            loadDashboard();
+
             loadProductsToTable();
+
             loadAgenciesToTable();
+
+            loadUsersToTable();
+
         });
     </script>
 </body>
