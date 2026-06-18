@@ -1,11 +1,14 @@
 # Note: Vercel expects the Flask variable to be named `app`.
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session
 from flask_cors import CORS
 from database import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 # Use default folders (Flask defaults to 'templates' and 'static')
 app = Flask(__name__)
+# Session secret key (set via environment in production)
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-secret')
 # Kích hoạt CORS để cho phép gọi API từ cổng Live Server (Port 5500)
 CORS(app)
 
@@ -392,6 +395,10 @@ def login():
             "role": user.get('role')
         }
 
+        # Lưu thông tin phiên làm việc vào session thay vì tin vào header từ frontend
+        session['user_id'] = user.get('id')
+        session['role'] = user.get('role')
+
         cursor.close()
         conn.close()
 
@@ -412,8 +419,8 @@ def login():
 
 @app.route('/api/users', methods=['GET'])
 def get_users():
-    # Kiểm tra quyền gọi API tạm thời theo header 'Role'
-    role = request.headers.get('Role')
+    # Kiểm tra quyền gọi API theo session (không tin tưởng header từ frontend)
+    role = session.get('role')
     if role != 'admin':
         return jsonify({"error": "Không có quyền"}), 403
 
@@ -447,8 +454,8 @@ def get_users():
 
 @app.route('/api/users', methods=['POST'])
 def create_user():
-    # Tạo user mới (chỉ admin)
-    role = request.headers.get('Role')
+    # Tạo user mới (chỉ admin) - kiểm tra từ session
+    role = session.get('role')
     if role != 'admin':
         return jsonify({"error": "Không có quyền"}), 403
 
@@ -492,7 +499,7 @@ def create_user():
 )
 def reset_password(user_id):
 
-    role = request.headers.get('Role')
+    role = session.get('role')
     if role != 'admin':
         return jsonify({"error": "Không có quyền"}), 403
 
@@ -528,7 +535,7 @@ def reset_password(user_id):
 @app.route('/api/users/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
 
-    role = request.headers.get('Role')
+    role = session.get('role')
     if role != 'admin':
         return jsonify({"error": "Không có quyền"}), 403
 

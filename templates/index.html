@@ -452,13 +452,11 @@
     </div>
 
 </div>
-        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button><button
-type="button"
-class="btn btn-warning"
-data-bs-dismiss="modal"
-onclick="updateProduct()">
-Lưu
-</button></div></div></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="button" id="btnEditSave" class="btn btn-warning" onclick="updateProduct()">Lưu</button>
+        </div>
+    </div></div></div>
     </div>
     <div class="modal fade" id="modalDeleteConfirm" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered"><div class="modal-content border-0 shadow"><div class="modal-body text-center pt-4"><div class="text-danger mb-2"><i class="fa-solid fa-circle-exclamation fa-2x"></i></div><h6 class="fw-bold">Xóa mục này vĩnh viễn?</h6></div><div class="modal-footer justify-content-center border-0"><button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Không</button><button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal" onclick="deleteProduct()">Đồng ý</button></div></div></div>
@@ -642,14 +640,18 @@ Lưu
         document.querySelectorAll('#menuTabs .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
-                document.querySelector('#menuTabs .nav-link.active').classList.remove('active');
+                const activeNav = document.querySelector('#menuTabs .nav-link.active');
+                if (activeNav) activeNav.classList.remove('active');
                 this.classList.add('active');
 
                 const targetId = this.getAttribute('data-target');
-                document.querySelector('.content-section.active').classList.remove('active');
-                document.getElementById(targetId).classList.add('active');
+                const currentContent = document.querySelector('.content-section.active');
+                if (currentContent) currentContent.classList.remove('active');
+                const targetEl = document.getElementById(targetId);
+                if (targetEl) targetEl.classList.add('active');
 
-                document.getElementById('page-title').innerText = this.innerText.trim();
+                const pageTitleEl = document.getElementById('page-title');
+                if (pageTitleEl) pageTitleEl.innerText = this.innerText.trim();
             });
         });
 
@@ -902,35 +904,57 @@ function updateProduct(){
         )
 };
 
-    fetch(
-        `${API_BASE_URL}/products/${currentEditId}`,
-        {
-            method:'PUT',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify(data)
+    const btn = document.getElementById('btnEditSave');
+    if (btn) {
+        btn.disabled = true;
+        btn.dataset.origText = btn.innerHTML;
+        btn.innerHTML = 'Đang lưu...';
+    }
+
+    fetch(`${API_BASE_URL}/products/${currentEditId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message || 'Cập nhật thành công');
+
+        currentEditId = null;
+
+        loadProductsToTable();
+
+        loadDashboard();
+
+        // Đóng modal edit sau khi update thành công
+        try {
+            const modalEl = document.getElementById('modalEditProduct');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) modalInstance.hide();
+        } catch (e) {}
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.origText || 'Lưu';
         }
-    )
-    .then(response=>response.json())
-    .then(data=>{
-
-    alert(data.message);
-
-    currentDeleteId = null;
-
-    loadProductsToTable();
-
-    loadDashboard();
-
-})
+    })
+    .catch(error => {
+        console.error(error);
+        alert('Lỗi khi cập nhật sản phẩm');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = btn.dataset.origText || 'Lưu';
+        }
+    });
 
 }
 
 function loadUsersToTable(){
 
     fetch(`${API_BASE_URL}/users`, {
-        headers: { 'Role': (user && user.role) || '' }
+        headers: { 'Role': (user && user.role) || '' },
+        credentials: 'same-origin'
     })
     .then(response => {
         if (response.status === 403) return response.json().then(j=>{throw j});
@@ -987,7 +1011,8 @@ function deleteUser(userId){
 
     fetch(`${API_BASE_URL}/users/${userId}`,{
         method:'DELETE',
-        headers: { 'Role': (user && user.role) || '' }
+        headers: { 'Role': (user && user.role) || '' },
+        credentials: 'same-origin'
     })
     .then(response => response.json().then(json => ({status: response.status, body: json})))
     .then(({status, body})=>{
@@ -1028,6 +1053,7 @@ function createUser(){
             'Content-Type': 'application/json',
             'Role': (user && user.role) || ''
         },
+        credentials: 'same-origin',
         body: JSON.stringify({ username, password, fullname, role: roleVal })
     })
     .then(response => response.json().then(json => ({status: response.status, body: json})))
@@ -1051,7 +1077,8 @@ function resetPassword(userId){
 
     fetch(`${API_BASE_URL}/users/reset/${userId}`,{
         method: 'PUT',
-        headers: { 'Role': (user && user.role) || '' }
+        headers: { 'Role': (user && user.role) || '' },
+        credentials: 'same-origin'
     })
     .then(response => response.json())
     .then(data => {
@@ -1085,7 +1112,9 @@ function resetPassword(userId){
 
             loadAgenciesToTable();
 
-            loadUsersToTable();
+            if (user && user.role === 'admin') {
+                loadUsersToTable();
+            }
 
         });
     </script>
