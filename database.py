@@ -1,20 +1,20 @@
+import os
 import mysql.connector
 from mysql.connector import Error
 
 def get_db_connection():
-    """Hàm khởi tạo và trả về kết nối tới MySQL trong XAMPP"""
+    """Hàm khởi tạo và trả về kết nối tới MySQL (dùng biến môi trường)"""
     try:
         connection = mysql.connector.connect(
-            host='localhost',
-            user='root',         # Tài khoản mặc định của XAMPP
-            password='',         # Mật khẩu mặc định của XAMPP để trống
-            database='npp_manager',
-            port=3306            
+            host=os.environ.get("DB_HOST"),
+            user=os.environ.get("DB_USER"),
+            password=os.environ.get("DB_PASSWORD"),
+            database=os.environ.get("DB_NAME"),
+            port=int(os.environ.get("DB_PORT"))
         )
         if connection.is_connected():
             return connection
     except Error as e:
-        # Bỏ dấu # ở đây để Terminal hiển thị rõ nguyên nhân nếu lỗi
         print("====== LỖI KẾT NỐI DATABASE ======")
         print(e)
         print("==================================")
