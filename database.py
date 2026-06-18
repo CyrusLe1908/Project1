@@ -1,6 +1,9 @@
 import os
+from dotenv import load_dotenv
 import mysql.connector
 from mysql.connector import Error
+
+load_dotenv()
 
 def get_db_connection():
     """Hàm khởi tạo và trả về kết nối tới MySQL (dùng biến môi trường)"""

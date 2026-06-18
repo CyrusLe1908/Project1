@@ -1,4 +1,6 @@
 # Note: Vercel expects the Flask variable to be named `app`.
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, jsonify, request, render_template, session
 from flask_cors import CORS
 from database import get_db_connection
@@ -356,6 +358,9 @@ def login():
                 "success": False,
                 "message": "Sai tài khoản hoặc mật khẩu"
             }), 401
+        
+        print("DB:", stored_hash)
+        print("INPUT:", password)
 
         # Kiểm tra mật khẩu: ưu tiên compare hash nếu có
         stored_hash = user.get('password_hash') if isinstance(user, dict) else None
