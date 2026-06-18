@@ -1,5 +1,5 @@
 # Note: Vercel expects the Flask variable to be named `app`.
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_cors import CORS
 from database import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,6 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 # Kích hoạt CORS để cho phép gọi API từ cổng Live Server (Port 5500)
 CORS(app)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # =======================================================
 # 1. API LẤY DANH SÁCH SẢN PHẨM (GET)
