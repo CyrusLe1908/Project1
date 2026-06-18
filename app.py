@@ -3,7 +3,7 @@ from flask_cors import CORS
 from database import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates', static_folder='static')
 # Kích hoạt CORS để cho phép gọi API từ cổng Live Server (Port 5500)
 CORS(app)
 
