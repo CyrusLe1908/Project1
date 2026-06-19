@@ -231,17 +231,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="import-table-body">
-                                        <tr>
-                                            <td><code>PNK-260601</code></td>
-                                            <td>15/06/2026</td>
-                                            <td>Công ty TNHH Coca-Cola VN</td>
-                                            <td class="fw-semibold">90,000,000 đ</td>
-                                            <td>Phương Minh Đức</td>
-                                            <td><span class="badge bg-success">Đã nhập kho</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-light border" data-bs-toggle="modal" data-bs-target="#modalPrintImport"><i class="fa-solid fa-print me-1"></i> In phiếu</button>
-                                            </td>
-                                        </tr>
+                                        <!-- Nội dung phiếu nhập sẽ được load từ API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -267,16 +257,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="export-table-body">
-                                        <tr>
-                                            <td><code>PXK-260602</code></td>
-                                            <td>16/06/2026</td>
-                                            <td>Tạp hóa Minh Thư</td>
-                                            <td class="fw-semibold">7,500,000 đ</td>
-                                            <td><span class="badge bg-info text-dark">Đang vận chuyển</span></td>
-                                            <td class="text-center">
-                                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalViewExportDetail"><i class="fa-solid fa-eye me-1"></i> Chi tiết</button>
-                                            </td>
-                                        </tr>
+                                        <!-- Nội dung phiếu xuất sẽ được load từ API -->
                                     </tbody>
                                 </table>
                             </div>
@@ -332,21 +313,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="user-table-body">
-                                                <tr>
-                                                    <td><code>cyrusle.admin</code></td>
-                                                    <td>Quốc Cường (Bạn)</td>
-                                                    <td><span class="badge bg-danger">Admin</span></td>
-                                                    <td class="text-center"><button class="btn btn-sm btn-light" disabled>Mặc định</button></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><code>staff.minhduc</code></td>
-                                                    <td>Phương Minh Đức</td>
-                                                    <td><span class="badge bg-info text-dark">Staff</span></td>
-                                                    <td class="text-center">
-                                                        <button class="btn btn-sm btn-outline-warning me-1" data-bs-toggle="modal" data-bs-target="#modalLockUser"><i class="fa-solid fa-lock"></i> Khóa</button>
-                                                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#modalDeleteUser"><i class="fa-solid fa-trash"></i> Xóa</button>
-                                                    </td>
-                                                </tr>
+                                                <!-- Danh sách user sẽ được load từ API /api/users -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -377,9 +344,7 @@
                         <div class="mb-3">
                             <label class="form-label small fw-semibold">Danh mục hàng hóa</label>
                             <select id="p_category" class="form-select">
-                                <option value="1">Nước giải khát</option>
-                                <option value="2">Bánh kẹo / Đồ ăn vặt</option>
-                                <option value="3">Gia vị / Nhu yếu phẩm</option>
+                                <option value="">-- Chọn danh mục --</option>
                             </select>
                         </div>
                         <div class="row g-2 mb-3">
@@ -486,10 +451,8 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Chọn mặt hàng nhập về</label>
-                        <select class="form-select">
-                            <option>SP-001 - Nước ngọt Coca-Cola 320ml (Thùng)</option>
-                            <option>SP-002 - Mì ăn liền Hảo Hảo Tôm Chua Cay (Gói)</option>
-                            <option>SP-003 - Bánh quy Cosy Kinh Đô (Thùng)</option>
+                        <select id="import_product_select" class="form-select">
+                            <!-- Sản phẩm sẽ được load từ API /api/products -->
                         </select>
                     </div>
                     <div class="row g-2">
@@ -528,17 +491,14 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Chọn đại lý nhận hàng</label>
-                        <select class="form-select">
-                            <option>Tạp hóa Minh Thư (Đại lý cấp 1)</option>
-                            <option>Tạp hóa Phương Nam (Đại lý cấp 2)</option>
+                        <select id="export_agency_select" class="form-select">
+                            <!-- Đại lý sẽ được load từ API /api/agencies -->
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-semibold">Chọn mặt hàng cần xuất (Danh sách hàng sẵn trong kho)</label>
-                        <select class="form-select">
-                            <option>SP-001 - Nước ngọt Coca-Cola 320ml (Tồn: 500 thùng)</option>
-                            <option>SP-002 - Mì ăn liền Hảo Hảo (Tồn: 1,200 gói)</option>
-                            <option>SP-003 - Bánh quy Cosy Kinh Đô (Tồn: 150 thùng)</option>
+                        <select id="export_product_select" class="form-select">
+                            <!-- Sản phẩm sẽ được load từ API /api/products -->
                         </select>
                     </div>
                     <div class="row g-2">
@@ -581,18 +541,8 @@
                             </tr>
                         </thead>
                         <tbody id="export-detail-body">
-                            <tr>
-                                <td>Coca-Cola 320ml</td>
-                                <td><span class="badge bg-secondary">Thùng</span></td>
-                                <td>40 thùng</td>
-                                <td>7,500,000 đ</td>
-                            </tr>
-                            <tr>
-                                <td>Mì Hảo Hảo</td>
-                                <td><span class="badge bg-info text-dark">Gói</span></td>
-                                <td>200 gói</td>
-                                <td>700,000 đ</td>
-                            </tr>
+                            <!-- Chi tiết phiếu xuất sẽ được load từ API khi người dùng yêu cầu -->
+                        </tbody>
                         </tbody>
                     </table>
                 </div>
@@ -615,6 +565,145 @@
     <script>
         // Cấu hình Base URL dùng chung cho toàn bộ hệ thống dự án lâu dài
         const API_BASE_URL = '/api';
+
+        // Bộ nhớ tạm để lưu receipts khi load từ API (dùng để hiển thị chi tiết)
+        const RECEIPTS_CACHE = {};
+
+        // Tải danh sách categories từ products (unique) và populate select thêm sản phẩm
+        function populateCategories() {
+            fetch(`${API_BASE_URL}/products`)
+                .then(r => r.json())
+                .then(products => {
+                    const set = new Set();
+                    products.forEach(p => { if (p.category) set.add(p.category); });
+                    const sel = document.getElementById('p_category');
+                    if (!sel) return;
+                    // Giữ lại placeholder
+                    sel.innerHTML = '<option value="">-- Chọn danh mục --</option>' + Array.from(set).map(c=>`<option value="${c}">${c}</option>`).join('');
+                })
+                .catch(err => console.error('Lỗi khi load categories:', err));
+        }
+
+        // Populate các select sản phẩm dùng trong modal import/export
+        function populateProductSelects() {
+            fetch(`${API_BASE_URL}/products`)
+                .then(r => r.json())
+                .then(products => {
+                    const importSel = document.getElementById('import_product_select');
+                    const exportSel = document.getElementById('export_product_select');
+                    if (!importSel && !exportSel) return;
+
+                    const options = products.map(p => {
+                        const qty = p.stock_quantity || 0;
+                        const sku = p.sku || (`SP-${String(p.id).padStart(3,'0')}`);
+                        const txt = `${sku} - ${p.product_name || 'Không rõ'} (${p.unit||''}) (Tồn: ${qty})`;
+                        return `<option value="${p.id}">${txt}</option>`;
+                    }).join('');
+
+                    if (importSel) importSel.innerHTML = options;
+                    if (exportSel) exportSel.innerHTML = options;
+                })
+                .catch(err => console.error('Lỗi khi load products cho select:', err));
+        }
+
+        // Populate danh sách đại lý vào modal export
+        function populateAgencySelect() {
+            fetch(`${API_BASE_URL}/agencies`)
+                .then(r => r.json())
+                .then(agencies => {
+                    const sel = document.getElementById('export_agency_select');
+                    if (!sel) return;
+                    sel.innerHTML = agencies.map(a => `<option value="${a.agency_code||a.agency_name}">${a.agency_name||a.agency_code}</option>`).join('');
+                })
+                .catch(err => console.error('Lỗi khi load agencies cho select:', err));
+        }
+
+        // Tải danh sách receipts và phân loại import/export để hiển thị vào bảng tương ứng
+        function loadReceiptsToTables() {
+            fetch(`${API_BASE_URL}/receipts`)
+                .then(r => r.json())
+                .then(receipts => {
+                    const importTbody = document.getElementById('import-table-body');
+                    const exportTbody = document.getElementById('export-table-body');
+                    if (!importTbody || !exportTbody) return;
+
+                    let importHtml = '';
+                    let exportHtml = '';
+
+                    receipts.forEach(rec => {
+                        const id = rec.id || rec.receipt_no || JSON.stringify(rec).length;
+                        RECEIPTS_CACHE[id] = rec;
+
+                        const no = rec.receipt_no || rec.code || (`#${id}`);
+                        const date = rec.date || rec.created_at || rec.date_created || '';
+                        const partner = rec.supplier || rec.partner_name || rec.agency_name || rec.vendor || '';
+                        const total = rec.total_value || rec.total_amount || rec.total || 0;
+                        const totalText = total ? Number(total).toLocaleString('vi-VN') + ' đ' : '0 đ';
+                        const creator = rec.created_by || rec.creator || rec.user || '';
+                        const status = rec.status || 'Đang xử lý';
+
+                        let rType = (rec.type || rec.receipt_type || rec.direction || '').toString().toLowerCase();
+                        if (!rType) {
+                            if ((no || '').toString().toUpperCase().includes('PNK')) rType = 'import';
+                            if ((no || '').toString().toUpperCase().includes('PXK')) rType = 'export';
+                        }
+
+                        const row = `
+                            <tr>
+                                <td><code>${no}</code></td>
+                                <td>${date}</td>
+                                <td>${partner || (rec.agency_name||'')}</td>
+                                <td class="fw-semibold">${totalText}</td>
+                                <td>${creator}</td>
+                                <td><span class="badge bg-secondary">${status}</span></td>
+                                <td class="text-center">` +
+                                (rType && rType.includes('export') ? `<button class="btn btn-sm btn-outline-primary" onclick="showReceiptDetail('${id}')" data-bs-toggle="modal" data-bs-target="#modalViewExportDetail"><i class="fa-solid fa-eye me-1"></i> Chi tiết</button>` : `<button class="btn btn-sm btn-light border" onclick="printImport('${id}')"><i class="fa-solid fa-print me-1"></i> In phiếu</button>`) +
+                                `</td>
+                            </tr>`;
+
+                        if (rType && rType.includes('export')) exportHtml += row; else importHtml += row;
+                    });
+
+                    importTbody.innerHTML = importHtml || '<tr><td colspan="7" class="text-center text-muted">Không có phiếu nhập</td></tr>';
+                    exportTbody.innerHTML = exportHtml || '<tr><td colspan="6" class="text-center text-muted">Không có phiếu xuất</td></tr>';
+                })
+                .catch(err => console.error('Lỗi khi load receipts:', err));
+        }
+
+        function showReceiptDetail(id) {
+            const rec = RECEIPTS_CACHE[id];
+            const tbody = document.getElementById('export-detail-body');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if (!rec) {
+                tbody.innerHTML = '<tr><td colspan="4">Không tìm thấy chi tiết phiếu</td></tr>';
+                return;
+            }
+            const items = rec.items || rec.lines || rec.details || [];
+            if (items.length === 0) {
+                // Thử dựng một hàng tóm tắt nếu không có items
+                tbody.innerHTML = `<tr><td colspan="4">Tổng: ${rec.total_value || rec.total || '0'}</td></tr>`;
+                return;
+            }
+            const html = items.map(it => {
+                const name = it.product_name || it.name || it.product || '';
+                const unit = it.unit || it.u || '';
+                const qty = it.quantity || it.qty || 0;
+                const price = it.amount || it.total || it.price || 0;
+                const priceText = price ? Number(price).toLocaleString('vi-VN') + ' đ' : '0 đ';
+                return `<tr><td>${name}</td><td><span class="badge bg-secondary">${unit}</span></td><td>${qty}</td><td>${priceText}</td></tr>`;
+            }).join('');
+            tbody.innerHTML = html;
+        }
+
+        function printImport(id) {
+            const rec = RECEIPTS_CACHE[id];
+            alert('Lệnh in phiếu (mô phỏng) cho: ' + (rec ? (rec.receipt_no || id) : id));
+            // Có thể cập nhật nội dung modalPrintImport trước khi show
+            const modalEl = document.getElementById('modalPrintImport');
+            const modalInstance = bootstrap.Modal.getOrCreateInstance(modalEl);
+            modalInstance.show();
+        }
 
         // Kiểm tra trạng thái đăng nhập, nếu chưa có -> chuyển về trang login
         let user = null;
@@ -1111,6 +1200,12 @@ function resetPassword(userId){
             loadProductsToTable();
 
             loadAgenciesToTable();
+
+            // Populate selects and receipts từ DB
+            populateCategories();
+            populateProductSelects();
+            populateAgencySelect();
+            loadReceiptsToTables();
 
             if (user && user.role === 'admin') {
                 loadUsersToTable();
